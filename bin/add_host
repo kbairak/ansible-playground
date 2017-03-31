@@ -1,0 +1,38 @@
+#! /usr/bin/env bash
+
+MACHINE_NAME=$1
+
+LAST_PORT=`cat ssh.config | tail -1 | awk '{ print $2 }'`
+# Check if it's a number
+if ! [ "$LAST_PORT" -eq "$LAST_PORT" ] 2> /dev/null; then
+    LAST_PORT=2221
+fi
+
+NEW_PORT=$((LAST_PORT + 1))
+
+echo "- Adding service to 'docker-compose.yml'"
+
+cat >> docker-compose.yml << EOM
+
+  $MACHINE_NAME:
+    image: debian-ssh-python
+    env_file: docker-compose.env
+    ports:
+      - "$NEW_PORT:22"
+EOM
+
+echo "  Service added, make sure you run \`docker-compose up -d\` to enable it"
+
+echo "- Adding host to ssh.config"
+
+cat >> ssh.config << EOM
+
+Host $MACHINE_NAME
+    HostName localhost
+    User root
+    Port $NEW_PORT
+EOM
+
+echo "- Adding host to inventory"
+
+echo $MACHINE_NAME >> inventory
