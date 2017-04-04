@@ -64,41 +64,41 @@ webserver | SUCCESS => {
 
 ### Housekeeping your docker containers
 
-As long as you don't remove anything from your `docker-compose.yml` file, you
-should be able to remove all your containers with:
+* As long as you don't remove anything from your `docker-compose.yml` file,
+  you should be able to remove all your containers with:
 
-```bash
-make down  # Runs `docker-compose down`
-```
+  ```bash
+  make down  # Runs `docker-compose down`
+  ```
 
-If you want to stop the containers instead so that you don't lose any changes
-you might have made to them, run
+* If you want to stop the containers so that you don't lose any changes you
+  might have made to them, run
 
-```bash
-make stop  # Runs `docker-compose stop`
-```
+  ```bash
+  make stop  # Runs `docker-compose stop`
+  ```
+ 
+  instead. You can restart them later with:
 
-instead. You can restart them later with:
+  ```bash
+  make restart  # Runs `docker-compose restart`
+  ```
 
-```bash
-make restart  # Runs `docker-compose restart`
-```
+* If you remove some services from `docker-compose.yml` while their respective
+  containers are running, then `docker-compose` won't be able to find them. In
+  this case, look them up with:
 
-If you remove some services from `docker-compose.yml` while their respective
-containers are running, then `docker-compose` won't be able to find them. In
-this case, look them up with:
+  ```bash
+  docker ps -a
+  
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS                              NAMES
+  c9fcc0e9a172        debian-ssh-python   "/run.sh"                4 minutes ago       Up 4 minutes                0.0.0.0:2222->22/tcp               ansibleplayground_webserver_1
+  ```
+ 
+  The names added by `docker-compose` should make it easy to identify and
+  stop/remove them.
 
-```bash
-docker ps -a
-
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS                              NAMES
-c9fcc0e9a172        debian-ssh-python   "/run.sh"                4 minutes ago       Up 4 minutes                0.0.0.0:2222->22/tcp               ansibleplayground_webserver_1
-```
-
-The names added by `docker-compose` should make it easy to identify and
-stop/remove them.
-
-```bash
-docker stop ansibleplayground_webserver_1
-docker rm -f ansibleplayground_webserver_1
-```
+  ```bash
+  docker stop ansibleplayground_webserver_1
+  docker rm -f ansibleplayground_webserver_1
+  ```
