@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 MACHINE_NAME=$1
-if [ -z $MACHINE_NAME];then
+if [ -z $MACHINE_NAME ]; then
     echo "MACHINE_NAME is unset or set to the empty string"
     exit
 fi
